@@ -1,0 +1,4 @@
+bamt==1.1.25
+dill==0.3.6
+plotly==5.14.1
+tedeous==0.1.2

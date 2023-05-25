@@ -1,0 +1,129 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 800px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#bcbddc", "font": {"size": 36}, "id": "v{power: 1.0} * dv/dx1{power: 1.0}_u", "label": "v{power: 1.0} * dv/dx1{power: 1.0}_u", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 v{power: 1.0} * dv/dx1{power: 1.0}_u (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "dv/dx1{power: 1.0}_u", "label": "dv/dx1{power: 1.0}_u", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 dv/dx1{power: 1.0}_u (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "du/dx1{power: 1.0} * dv/dx1{power: 1.0}_u", "label": "du/dx1{power: 1.0} * dv/dx1{power: 1.0}_u", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 du/dx1{power: 1.0} * dv/dx1{power: 1.0}_u (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "du/dx1{power: 1.0} * v{power: 1.0}_u", "label": "du/dx1{power: 1.0} * v{power: 1.0}_u", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 du/dx1{power: 1.0} * v{power: 1.0}_u (MixtureGaussian)"}, {"color": "#d95f02", "font": {"size": 36}, "id": "du/dx1{power: 1.0}_r_u", "label": "du/dx1{power: 1.0}_r_u", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 du/dx1{power: 1.0}_r_u (Discrete)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "dv/dx1{power: 1.0} * u{power: 1.0}_v", "label": "dv/dx1{power: 1.0} * u{power: 1.0}_v", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 dv/dx1{power: 1.0} * u{power: 1.0}_v (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "du/dx1{power: 1.0}_v", "label": "du/dx1{power: 1.0}_v", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 du/dx1{power: 1.0}_v (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "dv/dx1{power: 1.0} * du/dx1{power: 1.0}_v", "label": "dv/dx1{power: 1.0} * du/dx1{power: 1.0}_v", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 dv/dx1{power: 1.0} * du/dx1{power: 1.0}_v (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "du/dx1{power: 1.0} * u{power: 1.0}_v", "label": "du/dx1{power: 1.0} * u{power: 1.0}_v", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 du/dx1{power: 1.0} * u{power: 1.0}_v (MixtureGaussian)"}, {"color": "#d95f02", "font": {"size": 36}, "id": "dv/dx1{power: 1.0}_r_v", "label": "dv/dx1{power: 1.0}_r_v", "level": 0, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 dv/dx1{power: 1.0}_r_v (Discrete)"}, {"color": "#d9d9d9", "font": {"size": 36}, "id": "v{power: 1.0} * u{power: 1.0}_u", "label": "v{power: 1.0} * u{power: 1.0}_u", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 v{power: 1.0} * u{power: 1.0}_u (ConditionalMixtureGaussian)"}, {"color": "#d95f02", "font": {"size": 36}, "id": "dv/dx1{power: 1.0} * u{power: 1.0}_r_v", "label": "dv/dx1{power: 1.0} * u{power: 1.0}_r_v", "level": 1, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 dv/dx1{power: 1.0} * u{power: 1.0}_r_v (Discrete)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "u{power: 1.0}_u", "label": "u{power: 1.0}_u", "level": 2, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 u{power: 1.0}_u (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "v{power: 1.0}_u", "label": "v{power: 1.0}_u", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 v{power: 1.0}_u (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "C_u", "label": "C_u", "level": 3, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 C_u (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "u{power: 1.0} * du/dx1{power: 1.0}_u", "label": "u{power: 1.0} * du/dx1{power: 1.0}_u", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 u{power: 1.0} * du/dx1{power: 1.0}_u (MixtureGaussian)"}, {"color": "#d9d9d9", "font": {"size": 36}, "id": "C_v", "label": "C_v", "level": 4, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 C_v (ConditionalMixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "v{power: 1.0}_v", "label": "v{power: 1.0}_v", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 v{power: 1.0}_v (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "u{power: 1.0}_v", "label": "u{power: 1.0}_v", "level": 5, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 u{power: 1.0}_v (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "v{power: 1.0} * u{power: 1.0}_v", "label": "v{power: 1.0} * u{power: 1.0}_v", "level": 6, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 v{power: 1.0} * u{power: 1.0}_v (MixtureGaussian)"}, {"color": "#bcbddc", "font": {"size": 36}, "id": "dv/dx1{power: 1.0} * v{power: 1.0}_v", "label": "dv/dx1{power: 1.0} * v{power: 1.0}_v", "level": 7, "shape": "dot", "size": 45, "title": "\u0423\u0437\u0435\u043b \u0431\u0430\u0439\u0435\u0441\u043e\u0432\u0441\u043a\u043e\u0439 \u0441\u0435\u0442\u0438 dv/dx1{power: 1.0} * v{power: 1.0}_v (MixtureGaussian)"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "du/dx1{power: 1.0}_r_u", "to": "v{power: 1.0} * u{power: 1.0}_u"}, {"arrows": "to", "from": "dv/dx1{power: 1.0}_r_v", "to": "dv/dx1{power: 1.0} * u{power: 1.0}_r_v"}, {"arrows": "to", "from": "v{power: 1.0} * u{power: 1.0}_u", "to": "C_u"}, {"arrows": "to", "from": "v{power: 1.0} * u{power: 1.0}_u", "to": "u{power: 1.0}_u"}, {"arrows": "to", "from": "dv/dx1{power: 1.0} * u{power: 1.0}_r_v", "to": "C_v"}, {"arrows": "to", "from": "u{power: 1.0}_u", "to": "u{power: 1.0} * du/dx1{power: 1.0}_u"}, {"arrows": "to", "from": "u{power: 1.0}_u", "to": "v{power: 1.0}_u"}, {"arrows": "to", "from": "u{power: 1.0}_u", "to": "C_u"}, {"arrows": "to", "from": "u{power: 1.0}_u", "to": "C_v"}, {"arrows": "to", "from": "v{power: 1.0}_u", "to": "u{power: 1.0} * du/dx1{power: 1.0}_u"}, {"arrows": "to", "from": "C_u", "to": "C_v"}, {"arrows": "to", "from": "C_v", "to": "v{power: 1.0}_v"}, {"arrows": "to", "from": "C_v", "to": "u{power: 1.0}_v"}, {"arrows": "to", "from": "C_v", "to": "dv/dx1{power: 1.0} * v{power: 1.0}_v"}, {"arrows": "to", "from": "C_v", "to": "v{power: 1.0} * u{power: 1.0}_v"}, {"arrows": "to", "from": "v{power: 1.0}_v", "to": "v{power: 1.0} * u{power: 1.0}_v"}, {"arrows": "to", "from": "u{power: 1.0}_v", "to": "dv/dx1{power: 1.0} * v{power: 1.0}_v"}, {"arrows": "to", "from": "v{power: 1.0} * u{power: 1.0}_v", "to": "dv/dx1{power: 1.0} * v{power: 1.0}_v"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "layout": {
+        "hierarchical": {
+            "blockShifting": true,
+            "edgeMinimization": true,
+            "enabled": true,
+            "levelSeparation": 150,
+            "parentCentralization": true,
+            "sortMethod": "hubsize",
+            "treeSpacing": 200
+        },
+        "improvedLayout": true,
+        "randomSeed": 0
+    },
+    "physics": {
+        "enabled": true,
+        "hierarchicalRepulsion": {
+            "centralGravity": 0.5,
+            "damping": 0.09,
+            "nodeDistance": 300,
+            "springConstant": 0.01,
+            "springLength": 100
+        },
+        "solver": "hierarchicalRepulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
